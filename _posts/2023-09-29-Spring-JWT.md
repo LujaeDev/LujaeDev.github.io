@@ -259,7 +259,6 @@ import java.util.Optional;
 import static org.springframework.security.config.Elements.JWT;
 
 @Service
-@RequiredArgsConstructor
 @Getter
 @Slf4j
 public class JwtService {
