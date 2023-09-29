@@ -234,12 +234,14 @@ spring.profiles.include=jwt
 ```java
 package com.example.myJwtOauth.jwt.application;
 
+
 import com.example.myJwtOauth.member.domain.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -256,10 +258,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.springframework.security.config.Elements.JWT;
-
 @Service
 @Getter
+@RequiredArgsConstructor
 @Slf4j
 public class JwtService {
     @Value("${jwt.secretKey}")
@@ -286,10 +287,11 @@ public class JwtService {
     private final MemberRepository memberRepository;
     private SecretKey key;
 
-    public JwtService(@Autowired  MemberRepository memberRepository){
+    @PostConstruct
+    void init(){
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        this.memberRepository = memberRepository;
     }
+
 
     public String createAccessToken(String email) {
         Date now = new Date();
@@ -412,6 +414,7 @@ public class JwtService {
         }
     }
 }
+
 ```
 
 - .setSubject(String str)
